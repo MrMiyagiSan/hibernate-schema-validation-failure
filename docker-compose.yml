@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  default-db:
+    build: "./spanner-emulators/default"
+    ports:
+      - "9011:9010"
+      - "9021:9020"
+  init-read-database-db:
+    build: "./spanner-emulators/read-database"
+    ports:
+      - "9010:9010"
+      - "9020:9020"
+  read-database-db:
+    image: "gcr.io/cloud-spanner-emulator/emulator"
+    ports:
+      - "9010:9010"
+      - "9020:9020"
+    profiles:
+      - working
