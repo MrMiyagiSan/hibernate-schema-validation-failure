@@ -7,13 +7,13 @@ WORKDIR /usr/bin
 
 COPY init.sh .
 COPY run.sh .
+COPY car.sql .
+
+RUN chmod +x init.sh
+RUN chmod +x run.sh
+RUN chmod +r car.sql
 
 # Expose the default ports 9010 (gRPC) and 9020 (REST)
 EXPOSE 9010 9020
 
 CMD [ "run.sh" ]
-
-# Run the gateway process, bind to 0.0.0.0 as under MacOS, listening on
-# localhost will make the server invisible outside the container.
-#CMD ["./gateway_main", "--hostname", "0.0.0.0"]
-

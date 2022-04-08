@@ -3,10 +3,14 @@ set -Eeuo pipefail
 
 echo "Init emulator config"
 
-gcloud config configuration create emulator
+gcloud config configurations create emulator
 gcloud config set auth/disable_credentials true
-gcloud config set project test_project
+gcloud config set project "test-project"
 gcloud config set api_endpoint_overrides/spanner http://localhost:9020/
 
-gcloud spanner instances create "test-instance" --description="CarRent"
-gcloud spanner databases create "CarRent" --instance="test-instance"
+echo "Create spanner instance and database"
+gcloud spanner instances create "test-instance" --description="CarRent" --config=emulator-config --nodes=1
+gcloud spanner databases create "car-rent" --instance="test-instance"
+
+echo "Init DB schema"
+gcloud spanner databases ddl update "car-rent" --instance="test-instance" --configuration=emulator --ddl-file="./car-rent.sql"
